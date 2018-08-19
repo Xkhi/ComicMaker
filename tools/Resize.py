@@ -2,24 +2,29 @@ from glob import glob
 from PIL import Image
 import os
 
-class Resizer(object):
-    def __init__(self):
-        pass
-    
-    def savePicture(self):
-        pass
-    
-    def closePicture(self):
-        pass
-
+class Resizer(Image.Image):
     def isSourceFile(self):
         pass
 
     def resize(self):
         pass
 
-    def start(self):
-        pass
+    def compress():
+        kindle_resolution = (1024,758)
+        kindle_dpi = (212,212)
+        dest_size = (812,1200)
+        for fi in files:
+            im = Image.open(fi)
+            name, ext = os.path.splitext(fi)
+            oldsize = os.stat(fi).st_size
+            if(im.size > dest_size):
+                out = im.resize(dest_size,Image.HAMMING).convert('L')
+                out.save("../output_test/{}.jpg".format(name),'jpeg',optimize=True,quality=10)
+            else:
+                out = im.convert('L').save("../output_test/{}.jpg".format(name),'jpeg',optimize=True,quality=10)
+            newsize = os.stat("../output_test/{}.jpg".format(name)).st_size
+            percent = (oldsize-newsize)/float(oldsize)*100
+            print percent
 
 def routine():
     folderlist = glob('*')
@@ -56,4 +61,4 @@ def routine():
         os.chdir('..')
 
 if __name__== '__main__':
-    routine()
+    print __name__
