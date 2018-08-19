@@ -3,30 +3,35 @@ from PIL import Image
 import os
 
 class Resizer(Image.Image):
-    def isSourceFile(self):
-        pass
+    def __init__(self):
+        self.kindle_resolution = (758,1024)
+        self.kindle_dpi = (212,212)
+    
+    @property    
+    def isWide(self):
+        if self.width > self.height:
+            return True
+        else:
+            return False
+        
+    def resize2kindle(self):
+        if(self.height > self.kindle_resolution[1]):
+            self.resize(self.kindle_resolution,Image.HAMMING).convert('L')
+        else:
+            self.convert('L')
 
-    def resize(self):
-        pass
-
-    def compress():
-        kindle_resolution = (1024,758)
-        kindle_dpi = (212,212)
-        dest_size = (812,1200)
-        for fi in files:
-            im = Image.open(fi)
-            name, ext = os.path.splitext(fi)
-            oldsize = os.stat(fi).st_size
-            if(im.size > dest_size):
-                out = im.resize(dest_size,Image.HAMMING).convert('L')
-                out.save("../output_test/{}.jpg".format(name),'jpeg',optimize=True,quality=10)
-            else:
-                out = im.convert('L').save("../output_test/{}.jpg".format(name),'jpeg',optimize=True,quality=10)
-            newsize = os.stat("../output_test/{}.jpg".format(name)).st_size
-            percent = (oldsize-newsize)/float(oldsize)*100
-            print percent
-
+    def save2kindle(self,name,qual):
+        self.save("./output/{}.jpg".format(name),'jpeg',optimize=True,quality=qual)
+        
 def routine():
+#     for fi in files:
+#         im = Image.open(fi)
+#         name, ext = os.path.splitext(fi)
+#         oldsize = os.stat(fi).st_size
+#         newsize = os.stat("../output_test/{}.jpg".format(name)).st_size
+#         percent = (oldsize-newsize)/float(oldsize)*100
+#         print percent
+
     folderlist = glob('*')
     destination = '../Scott Pilgrim Resized/'
     
