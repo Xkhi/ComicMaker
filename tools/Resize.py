@@ -1,9 +1,10 @@
 from glob import glob
-from PIL import Image
+from PIL.Image import Image as Im
 import os
 
-class Resizer(Image.Image):
+class Resizer(Im):
     def __init__(self):
+        Im.__init__(self)
         self.kindle_resolution = (758,1024)
         self.kindle_dpi = (212,212)
     
@@ -14,7 +15,16 @@ class Resizer(Image.Image):
         else:
             return False
         
+    def splitHalves(self):
+        rt = (self.width/2,0,self.width,self.height)
+        lt = (0,0,(self.width/2-1),self.height)
+        return self.crop(rt), self.crop(lt)
+        
     def resize2kindle(self):
+        dest_size = (0,0)
+        width_ratio = self.width / float(self.kindle_resolution[0])
+        height_ratio = self.height / float(self.kindle_resolution[1])
+                
         if(self.height > self.kindle_resolution[1]):
             self.resize(self.kindle_resolution,Image.HAMMING).convert('L')
         else:
@@ -66,4 +76,6 @@ def routine():
         os.chdir('..')
 
 if __name__== '__main__':
+    im = Resizer()
+    im
     print __name__
